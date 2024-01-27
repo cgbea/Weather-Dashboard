@@ -1,39 +1,3 @@
-// var APIKey = "c91d97b6ecd2f9c86a0a9473a725de0c"
-
-// var geoQueryUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${APIkey}`;
-// var weatherQueryURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`;
-// var search = $("#search-button")
-// // data.coord.lat
-// //  data.coord.lon
-
-// fetch(geoQueryUrl)
-// .then(function (response) {
-//   // Calling .json() to access the json data stored inside the returned promise
-//   return response.json();
-// })
-// // We store all of the retrieved data inside of an object called "data"
-// .then(function (data) {
-//   // Log the queryURL
-//     console.log(geoQueryUrl)
-// });
-
-//  fetch(weatherQueryURL)
-//   .then(function (response) {
-//     // Calling .json() to access the json data stored inside the returned promise
-//     return response.json();
-//   })
-//   // We store all of the retrieved data inside of an object called "data"
-//   .then(function (data) {
-//     // Log the queryURL
-
-//   });
-
-//   search.on("click", function(event){
-//     event.preventDefault();
-//     var searchCity = $("#search-input").val();
-//     localStorage.setItem("City", searchCity)
-
-//   })
 
 var APIKey = "c91d97b6ecd2f9c86a0a9473a725de0c";
 var storedCities = JSON.parse(localStorage.getItem("city")) || [];
@@ -44,18 +8,26 @@ search.on("click", function (event) {
   event.preventDefault();
 
   // Get the value from the input field with id 'search-input'
-  var searchCity = $("#search-input").val();
+  var searchCity = $("#search-input").val().trim();
 
-  storedCities.push(searchCity);
+  if (searchCity === "") {
+    alert("Please enter a city name.");
+    return;
+  } else {
+    storedCities.push(searchCity);
 
-  // Save the updated array back to localStorage
-  localStorage.setItem("city", JSON.stringify(storedCities));
+    // Save the updated array back to localStorage
+    localStorage.setItem("city", JSON.stringify(storedCities));
 
- renderCities();
+    // Construct the URLs using the searchCity value
+    var geoQueryUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=1&appid=${APIKey}`;
 
-  // Construct the URLs using the searchCity value
-  var geoQueryUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=1&appid=${APIKey}`;
+    fetchFetch(geoQueryUrl);
+    renderCities();
+  }
+});
 
+function fetchFetch(geoQueryUrl) {
   // Make the fetch request for geo data
   fetch(geoQueryUrl)
     .then(function (response) {
@@ -82,33 +54,18 @@ search.on("click", function (event) {
           console.log(weatherData);
         });
     });
-});
+}
 
 function renderCities() {
-    var searchedCities = $("#history");
-    searchedCities.empty(); // Clear previous cities
-  
-    // Loop through the array and display each city
-    for (var i = 0; i < storedCities.length; i++) {
-      searchedCities.append(`<button type='button' class='btn btn-info m-2'>${storedCities[i]}</button>`);
-    }
+  var searchedCities = $("#history");
+  searchedCities.empty(); // Clear previous cities
+
+  // Loop through the array and display each city
+  for (var i = 0; i < storedCities.length; i++) {
+    searchedCities.append(`<button type='button' class='btn btn-secondary m-2'>${storedCities[i]}</button>`);
   }
-  
-  // Call renderCities initially to display any existing cities
-  renderCities();
+}
 
-// var cityButton = $("<button>").attr("type", "searchedCity").addClass("btn btn-info");
+// Call renderCities initially to display any existing cities
+renderCities();
 
-// var namedCityButton = cityButton.text(searchCity);
-
-// $("#history").append(namedCityButton);
-
-// console.log(namedCityButton);
-
-// //Creating a new button for the input
-// function cityButtonList() {
-//     var cityButton = $("<button>").attr("type", "searchedCity")
-//     var namedCityButton = cityButton.text(searchCity);
-//     $("#history").append(namedCityButton);
-//     console.log(namedCityButton)
-// }
