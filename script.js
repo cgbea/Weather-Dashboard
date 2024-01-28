@@ -1,6 +1,7 @@
 var APIKey = "c91d97b6ecd2f9c86a0a9473a725de0c";
 var storedCities = JSON.parse(localStorage.getItem("city")) || [];
 var search = $("#search-button");
+var clear = $("#clear-button");
 
 
 // Click event handler for the search button
@@ -23,9 +24,15 @@ search.on("click", function (event) {
     var geoQueryUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=1&appid=${APIKey}`;
 
     fetchFetch(geoQueryUrl);
-    renderCities();
+  renderCities();
   }
 });
+
+clear.on("click", function () {
+  localStorage.clear();
+  $("#history").empty();
+});
+
 
 function fetchFetch(geoQueryUrl) {
   // Make the fetch request for geo data
