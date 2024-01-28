@@ -30,6 +30,7 @@ search.on("click", function (event) {
 
 clear.on("click", function () {
   localStorage.clear();
+  storedCities = [];
   $("#history").empty();
 });
 
@@ -49,7 +50,7 @@ function fetchFetch(geoQueryUrl) {
       var lon = data[0].lon;
 
       // Construct the weather query URL using lat and lon
-      var weatherQueryURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`;
+      var weatherQueryURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`;
 
       // Make the fetch request for weather data
       fetch(weatherQueryURL)
@@ -57,13 +58,23 @@ function fetchFetch(geoQueryUrl) {
           return response.json();
         })
         .then(function (data) {
-          // Log or use the weather data as needed
+         
           console.log(data);
           todayCard();
+           // Apply the weather data to get icon temp, wind and humidity;
           var iconURL = `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png`;
           var icon = $("<img alt='weather icon'>");
           icon.attr('src', iconURL);
           $("#todayHead").append(icon);
+          var temp = $("<p>");
+          temp.text(`Temp: ${data.list[0].main.temp}°C`)
+          $("#today").append(temp);
+          var wind = $("<p>");
+          wind.text(`Wind: ${data.list[0].wind.speed} KPH`)
+          $("#today").append(wind);
+          var humidity = $("<p>");
+          humidity.text(`Humidity: ${data.list[0].main.humidity}%`)
+          $("#today").append(humidity);
         });
     });
 }
