@@ -5,3 +5,25 @@
 .form-inline {
     padding: 1%;
 }
+
+#today {
+    text-indent: 1%;
+}
+
+.card {
+    text-indent: 5%;
+}
+
+
+img {
+ height: 50px;
+ width: 50px;
+}
+
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+}
