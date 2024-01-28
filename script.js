@@ -1,7 +1,7 @@
-
 var APIKey = "c91d97b6ecd2f9c86a0a9473a725de0c";
 var storedCities = JSON.parse(localStorage.getItem("city")) || [];
 var search = $("#search-button");
+
 
 // Click event handler for the search button
 search.on("click", function (event) {
@@ -52,12 +52,11 @@ function fetchFetch(geoQueryUrl) {
         .then(function (data) {
           // Log or use the weather data as needed
           console.log(data);
-          var today = $("#today").addClass("border border-dark");
-          var h2 = $("<h2>");
-          h2.addClass("h3").text(storedCities[storedCities.length-1]);
-          today.append(h2);
-
-
+          todayCard();
+          var iconURL = `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png`;
+          var icon = $("<img alt='weather icon'>");
+          icon.attr('src', iconURL);
+          $("#todayHead").append(icon);
         });
     });
 }
@@ -68,13 +67,22 @@ function renderCities() {
 
   // Loop through the array and display each city
   for (var i = 0; i < storedCities.length; i++) {
-    searchedCities.append(`<button type='button' class='btn btn-secondary m-2'>${storedCities[i]}</button>`);
+    searchedCities.append(
+      `<button type='button' class='btn btn-secondary m-2'>${storedCities[i]}</button>`
+    );
   }
 }
 
-function todayCard(weatherQueryURL){
-
+function todayCard() {
+ 
+  var today = $("#today").addClass("border border-dark");
+  today.empty();
+  var date = dayjs().format("DD/MM/YYYY");
+  var h2 = $("<h2>");
+  h2.attr("id", "todayHead").addClass("h3").text(
+    storedCities[storedCities.length - 1] + " (" + date + ") "
+  );
+  today.append(h2);
 }
 // Call renderCities initially to display any existing cities
 renderCities();
-
