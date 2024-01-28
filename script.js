@@ -20,7 +20,7 @@ search.on("click", function (event) {
     localStorage.setItem("city", JSON.stringify(storedCities));
 
     // Construct the URLs using the searchCity value
-    var geoQueryUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=1&appid=${APIKey}`;
+    var geoQueryUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=1&appid=${APIKey}`;
 
     fetchFetch(geoQueryUrl);
     renderCities();
@@ -39,7 +39,7 @@ clear.on("click", function () {
 $("#history").on("click", ".btn-secondary", function () {
   console.log("Button Clicked");
   var thisCity = $(this).attr("name");
-  var geoQueryUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${thisCity}&limit=1&appid=${APIKey}`;
+  var geoQueryUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${thisCity}&limit=1&appid=${APIKey}`;
 
   // Make the fetch request for geo data
   fetch(geoQueryUrl)
@@ -55,7 +55,7 @@ $("#history").on("click", ".btn-secondary", function () {
       var lon = data[0].lon;
 
       // Construct the weather query URL using lat and lon
-      var weatherQueryURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`;
+      var weatherQueryURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`;
 
       // Make the fetch request for weather data
       fetch(weatherQueryURL)
@@ -105,7 +105,7 @@ function fetchFetch(geoQueryUrl) {
       var lon = data[0].lon;
 
       // Construct the weather query URL using lat and lon
-      var weatherQueryURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`;
+      var weatherQueryURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`;
 
       // Make the fetch request for weather data
       fetch(weatherQueryURL)
