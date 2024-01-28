@@ -49,9 +49,15 @@ function fetchFetch(geoQueryUrl) {
         .then(function (response) {
           return response.json();
         })
-        .then(function (weatherData) {
+        .then(function (data) {
           // Log or use the weather data as needed
-          console.log(weatherData);
+          console.log(data);
+          var today = $("#today").addClass("border border-dark");
+          var h2 = $("<h2>");
+          h2.addClass("h3").text(storedCities[storedCities.length-1]);
+          today.append(h2);
+
+
         });
     });
 }
@@ -66,6 +72,9 @@ function renderCities() {
   }
 }
 
+function todayCard(weatherQueryURL){
+
+}
 // Call renderCities initially to display any existing cities
 renderCities();
 
