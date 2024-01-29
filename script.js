@@ -34,6 +34,7 @@ clear.on("click", function () {
   $("#history").empty();
   $("#today").empty();
   $("#forecast").empty();
+  $(".col-lg-9").empty();
 });
 
 $("#history").on("click", ".btn-secondary", function () {
