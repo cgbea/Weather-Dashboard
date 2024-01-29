@@ -25,67 +25,6 @@ search.on("click", function (event) {
   }
 });
 
-// Add optional clear button if the user wants to start again.
-clear.on("click", function () {
-  localStorage.clear();
-  storedCities = [];
-  $("#history").empty();
-  $("#today").empty();
-  $("#forecast").empty();
-});
-
-// Buttons for previously searched cities can be clicked to trigger a similar function as to when search is clicked.
-$("#history").on("click", ".btn-secondary", function () {
-  console.log("Button Clicked");
-  var thisCity = $(this).attr("name");
-  var geoQueryUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${thisCity}&limit=1&appid=${APIKey}`;
-
-  // Make the fetch request for geo data since we are initially searching by city name, not coordinates.
-  fetch(geoQueryUrl)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      // lat and lon values can be found using the data from the first fetch request
-      var lat = data[0].lat;
-      var lon = data[0].lon;
-
-      // Construct the weather query URL using lat and lon
-      var weatherQueryURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`;
-
-      // Make the fetch request for weather data
-      fetch(weatherQueryURL)
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (data) {
-          var today = $("#today").addClass("border border-dark");
-          today.empty();
-          var date = dayjs().format("DD/MM/YYYY");
-          var h2 = $("<h2>");
-          h2.attr("id", "todayHead")
-            .addClass("h3")
-            .text(thisCity + " (" + date + ") ");
-          today.append(h2);
-          // Apply the weather data to get icon temp, wind and humidity;
-          var iconURL = `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png`;
-          var icon = $("<img alt='weather icon'>");
-          icon.attr("src", iconURL);
-          $("#todayHead").append(icon);
-          var temp = $("<p>");
-          temp.text(`Temp: ${data.list[0].main.temp}°C`);
-          $("#today").append(temp);
-          var wind = $("<p>");
-          wind.text(`Wind: ${data.list[0].wind.speed} KPH`);
-          $("#today").append(wind);
-          var humidity = $("<p>");
-          humidity.text(`Humidity: ${data.list[0].main.humidity}%`);
-          $("#today").append(humidity);
-          forecastCards(data);
-        });
-    });
-});
-
 function fetchFetch(geoQueryUrl) {
   // Make the fetch request for geo data since we are initially searching by city name, not coordinates.
   fetch(geoQueryUrl)
@@ -187,6 +126,67 @@ function forecastCards(data) {
     $(".cards").append(card);
   }
 }
+
+// Buttons for previously searched cities can be clicked to trigger a similar function as to when search is clicked.
+$("#history").on("click", ".btn-secondary", function () {
+  console.log("Button Clicked");
+  var thisCity = $(this).attr("name");
+  var geoQueryUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${thisCity}&limit=1&appid=${APIKey}`;
+
+  // Make the fetch request for geo data since we are initially searching by city name, not coordinates.
+  fetch(geoQueryUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      // lat and lon values can be found using the data from the first fetch request
+      var lat = data[0].lat;
+      var lon = data[0].lon;
+
+      // Construct the weather query URL using lat and lon
+      var weatherQueryURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`;
+
+      // Make the fetch request for weather data
+      fetch(weatherQueryURL)
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          var today = $("#today").addClass("border border-dark");
+          today.empty();
+          var date = dayjs().format("DD/MM/YYYY");
+          var h2 = $("<h2>");
+          h2.attr("id", "todayHead")
+            .addClass("h3")
+            .text(thisCity + " (" + date + ") ");
+          today.append(h2);
+          // Apply the weather data to get icon temp, wind and humidity;
+          var iconURL = `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png`;
+          var icon = $("<img alt='weather icon'>");
+          icon.attr("src", iconURL);
+          $("#todayHead").append(icon);
+          var temp = $("<p>");
+          temp.text(`Temp: ${data.list[0].main.temp}°C`);
+          $("#today").append(temp);
+          var wind = $("<p>");
+          wind.text(`Wind: ${data.list[0].wind.speed} KPH`);
+          $("#today").append(wind);
+          var humidity = $("<p>");
+          humidity.text(`Humidity: ${data.list[0].main.humidity}%`);
+          $("#today").append(humidity);
+          forecastCards(data);
+        });
+    });
+});
+
+// Add optional clear button if the user wants to start again.
+clear.on("click", function () {
+  localStorage.clear();
+  storedCities = [];
+  $("#history").empty();
+  $("#today").empty();
+  $("#forecast").empty();
+});
 
 // Call renderCities initially to display any existing cities
 renderCities();
