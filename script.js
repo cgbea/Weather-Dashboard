@@ -33,7 +33,7 @@ clear.on("click", function () {
   storedCities = [];
   $("#history").empty();
   $("#today").empty();
-  $("#forcast").empty()
+  $("#forecast").empty();
 });
 
 $("#history").on("click", ".btn-secondary", function () {
@@ -161,14 +161,13 @@ function forecastCards(data) {
   var forcast = $("#forecast");
   forcast.empty();
   var fiveDayHead = $("<h3>");
-  fiveDayHead.addClass("h4")
-    .text("5-Day Forecast");
+  fiveDayHead.addClass("h4").text("5-Day Forecast");
   forcast.append(fiveDayHead);
-  forcast.append("<div class= 'cards'></div>")
+  forcast.append("<div class= 'cards'></div>");
 
   // Loop through the forecast data and generate forecast cards
   for (var i = 1; i < 6; i++) {
-    var formattedDate = dayjs().add([i], 'day').format("DD/MM/YYYY");
+    var formattedDate = dayjs().add([i], "day").format("DD/MM/YYYY");
 
     // Create a card for each day
     var card = $("<div>").addClass("card col-sm-2 m-1 text-white bg-info");
@@ -177,14 +176,14 @@ function forecastCards(data) {
     var iconURL = `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}.png`;
     var icon = $("<img alt='weather icon'>");
     icon.attr("src", iconURL);
-    console.log(data)
+    console.log(data);
 
     // You need to add more details here based on your data structure
     // For example, you can add temperature, weather icon, etc.
 
     cardBody.append(cardTitle);
     card.append(cardBody);
-    card.append(icon)
+    card.append(icon);
     var temp = $("<p>");
     temp.text(`Temp: ${data.list[i].main.temp}°C`);
     card.append(temp);
@@ -203,7 +202,11 @@ function forecastCards(data) {
 function formatDate(timestamp) {
   // Assuming timestamp is in seconds
   var date = new Date(timestamp * 1000);
-  return date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  return date.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 // Call renderCities initially to display any existing cities
