@@ -2,7 +2,7 @@
 
 ## Description
 
-This project's goal was to build on existing starter code to create a weather dashboard displaying a current and 5-day forecast for the users searched city. The user's search history is also saved as clickable buttons so that they can easily return to previously searched city forecasts. 
+This project's goal was to build on existing starter code to create a weather dashboard displaying a current and 5-day forecast for the user's searched city. The user's search history is also saved as clickable buttons so that they can easily return to previously searched city forecasts. 
 
 
 ![Screenshot of deployed webpage on 2024-01-29](Screenshot-dashboard.png)
