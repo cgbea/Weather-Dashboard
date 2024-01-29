@@ -3,11 +3,10 @@ var storedCities = JSON.parse(localStorage.getItem("city")) || [];
 var search = $("#search-button");
 var clear = $("#clear-button");
 
-// Click event handler for the search button
+// A user can click search to find weather for their inputed city
 search.on("click", function (event) {
   event.preventDefault();
 
-  // Get the value from the input field with id 'search-input'
   var searchCity = $("#search-input").val().trim();
 
   if (searchCity === "") {
@@ -16,10 +15,8 @@ search.on("click", function (event) {
   } else {
     storedCities.push(searchCity);
 
-    // Save the updated array back to localStorage
+    // Saving the updated array of serached cities back to localStorage
     localStorage.setItem("city", JSON.stringify(storedCities));
-
-    // Construct the URLs using the searchCity value
     var geoQueryUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=1&appid=${APIKey}`;
 
     fetchFetch(geoQueryUrl);
@@ -28,6 +25,7 @@ search.on("click", function (event) {
   }
 });
 
+// Add optional clear button if the user wants to start again.
 clear.on("click", function () {
   localStorage.clear();
   storedCities = [];
@@ -36,21 +34,19 @@ clear.on("click", function () {
   $("#forecast").empty();
 });
 
+// Buttons for previously searched cities can be clicked to trigger a similar function as to when search is clicked.
 $("#history").on("click", ".btn-secondary", function () {
   console.log("Button Clicked");
   var thisCity = $(this).attr("name");
   var geoQueryUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${thisCity}&limit=1&appid=${APIKey}`;
 
-  // Make the fetch request for geo data
+  // Make the fetch request for geo data since we are initially searching by city name, not coordinates.
   fetch(geoQueryUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      // Log or use the data as needed
-      console.log(data);
-
-      // Assuming data[0] contains latitude and longitude information
+      // lat and lon values can be found using the data from the first fetch request
       var lat = data[0].lat;
       var lon = data[0].lon;
 
@@ -91,16 +87,13 @@ $("#history").on("click", ".btn-secondary", function () {
 });
 
 function fetchFetch(geoQueryUrl) {
-  // Make the fetch request for geo data
+  // Make the fetch request for geo data since we are initially searching by city name, not coordinates.
   fetch(geoQueryUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      // Log or use the data as needed
-      console.log(data);
-
-      // Assuming data[0] contains latitude and longitude information
+      // lat and lon values can be found using the data from the first fetch request
       var lat = data[0].lat;
       var lon = data[0].lon;
 
@@ -134,9 +127,10 @@ function fetchFetch(geoQueryUrl) {
     });
 }
 
+// Get previously searched cities from localstorage. Make sure this information isn't duplicated.
 function renderCities() {
   var searchedCities = $("#history");
-  searchedCities.empty(); // Clear previous cities
+  searchedCities.empty();
 
   // Loop through the array and display each city
   for (var i = 0; i < storedCities.length; i++) {
@@ -145,7 +139,7 @@ function renderCities() {
     );
   }
 }
-
+// Create a card showing current weather conditions for the most recently selected city.
 function todayCard() {
   var today = $("#today").addClass("border border-dark");
   today.empty();
@@ -157,6 +151,7 @@ function todayCard() {
   today.append(h2);
 }
 
+// Add future forecasts below today card
 function forecastCards(data) {
   var forcast = $("#forecast");
   forcast.empty();
@@ -165,7 +160,7 @@ function forecastCards(data) {
   forcast.append(fiveDayHead);
   forcast.append("<div class= 'cards'></div>");
 
-  // Loop through the forecast data and generate forecast cards
+  // Loop through the forecast data and generate forecast cards for 5 days ahaed.
   for (var i = 1; i < 6; i++) {
     var formattedDate = dayjs().add([i], "day").format("DD/MM/YYYY");
 
@@ -177,10 +172,6 @@ function forecastCards(data) {
     var icon = $("<img alt='weather icon'>");
     icon.attr("src", iconURL);
     console.log(data);
-
-    // You need to add more details here based on your data structure
-    // For example, you can add temperature, weather icon, etc.
-
     cardBody.append(cardTitle);
     card.append(cardBody);
     card.append(icon);
@@ -193,20 +184,8 @@ function forecastCards(data) {
     var humidity = $("<p>");
     humidity.text(`Humidity: ${data.list[i].main.humidity}%`);
     card.append(humidity);
-
     $(".cards").append(card);
   }
-}
-
-// Example date formatting function, you may need to customize this
-function formatDate(timestamp) {
-  // Assuming timestamp is in seconds
-  var date = new Date(timestamp * 1000);
-  return date.toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
 }
 
 // Call renderCities initially to display any existing cities
